@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NeosSdi.BfcNumerique.Web.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace NeosSdi.BfcNumerique.Web.Pages
 {
     public class QuizzModel : PageModel
     {
+        private const string _fromNumber = "+32460229315";
+
         private const int _questionsCount = 5;
 
         public List<Question> Questions { get; set; }
@@ -40,9 +42,12 @@ namespace NeosSdi.BfcNumerique.Web.Pages
 
         public IActionResult OnPostSendScore()
         {
-            
+            MessageResource.Create(
+                body: $"Vous avez obtenu {Score}/10 au quizz Neos-SDI !",
+                from: _fromNumber,
+                to: PhoneNumber);
 
-            return Page();
+            return RedirectToPage("/Index");
         }
     }
 }
